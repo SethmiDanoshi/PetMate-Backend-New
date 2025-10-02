@@ -45,4 +45,33 @@ public class CloudinaryService {
             log.error("Error deleting PDF from Cloudinary: {}", e.getMessage());
         }
     }
+
+    public Map<String, String> uploadImage(MultipartFile file) {
+        try {
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(
+                    file.getBytes(),
+                    ObjectUtils.asMap(
+                            "resource_type", "image",
+                            "folder", "petmate/products",
+                            "public_id", "product_" + System.currentTimeMillis()
+                    )
+            );
+
+            return Map.of(
+                    "url", (String) uploadResult.get("secure_url"),
+                    "publicId", (String) uploadResult.get("public_id")
+            );
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload image", e);
+        }
+    }
+
+    public void deleteImage(String publicId) {
+        try {
+            cloudinary.uploader().destroy(publicId, ObjectUtils.asMap("resource_type", "image"));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete image", e);
+        }
+    }
+
 }

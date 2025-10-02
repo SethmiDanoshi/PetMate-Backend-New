@@ -54,7 +54,7 @@ public class DoctorService {
                 .address(address)
                 .licensePdfUrl(uploadResult.get("url"))
                 .licensePdfPublicId(uploadResult.get("publicId"))
-                .isVerified(false) // Initially not verified
+                .isVerified(true) // Initially not verified
                 .isActive(true)
                 .role(Doctor.Role.DOCTOR)
                 .build();
